@@ -1,0 +1,156 @@
+<html>
+
+<head>
+    <link href="node_modules/bootstrap/dist/css/bootstrap.css" rel="stylesheet" />
+    <script src="node_modules/jquery/dist/jquery.js"></script>
+    <link href="node_modules/font-awesome/css/font-awesome.css" rel="stylesheet" />
+
+
+    <style>
+        #cep,
+        #numero {
+            width: 200px;
+        }
+        
+        #cep,
+        #numero,
+        #logradouro,
+        #complemento,
+        #uf,
+        #bairro,
+        #localidade {
+            border-color: rgb(106, 129, 129);
+            border-width: 5px;
+        }
+        
+        #uf {
+            width: 100px;
+        }
+        
+        #limpar {
+            margin-top: 15px;
+            border-color: rgb(61, 8, 8);
+            border-width: 5px;
+        }
+        
+        #complemento {
+            width: 300px;
+        }
+        
+        #logradouro,
+        #localidade,
+        #bairro {
+            width: 600px;
+        }
+        
+        #icon {
+            text-align: center;
+            margin-top: 300px;
+            width: 20px;
+            font-size: 200px;
+        }
+        
+        #consulta {
+            font-size: 30px;
+        }
+    </style>
+
+    <script>
+        function consultaCEP() {
+            let cep = $("#cep").val();
+
+            $.getJSON("https://viacep.com.br/ws/" + cep + "/json/?callback=?", function(dados) {
+                if (!("erro" in dados)) {
+                    $("#logradouro").val(dados.logradouro);
+                    $("#bairro").val(dados.bairro);
+                    $("#localidade").val(dados.localidade);
+                    $("#uf").val(dados.uf);
+
+                    $("#numero").focus();
+                } else {
+                    alert("CEP não encontrado.");
+                }
+            });
+        }
+
+        $(document).ready(function() {
+            $("#cep").on('keypress', function(e) {
+                if (e.which == 13 || e.which == 9) {
+                    consultaCEP();
+                }
+            });
+
+            $("#cep").blur(function() {
+                consultaCEP();
+            });
+
+            $("input").focus(function() {
+                $(this).css("background", "#cecece");
+            });
+
+            $("input").focusout(function() {
+                $(this).css("background", "#fff");
+            });
+
+            $("#limpar").click(function() {
+                $("#cep").val("");
+                $("#logradouro").val("");
+                $("#numero").val("");
+                $("#complemento").val("");
+                $("#bairro").val("");
+                $("#localidade").val("");
+                $("#uf").val("");
+
+                $("#cep").focus();
+            });
+
+
+        });
+    </script>
+
+
+</head>
+
+<body>
+    <div class="container">
+        <div class="row">
+
+            <div class="col-3">
+                <i class="fa fa-spin fa-envelope" id="icon"></i>
+            </div>
+
+            <div class="col-3">
+                <h1 id="consulta">Consulta Endereço</h1>
+                <label form="cep" class="form-label"> CEP</label>
+                <input type="cep" class="form-control" id="cep" placeholder="Digite o CEP">
+
+                <label form="logradouro" class="form-label"> Logradouro </label>
+                <input type="logradouro" class="form-control" id="logradouro">
+
+                <label form="numero" class="form-label">Numero</label>
+                <input type="numero" class="form-control" id="numero">
+
+                <label form="complemeto" class="form-label">Complemento</label>
+                <input type="complemento" class="form-control" id="complemento">
+
+                <label form="bairro" class="form-label">Bairro</label>
+                <input type="bairro" class="form-control" id="bairro">
+
+                <label form="localidade" class="form-label">Localidade</label>
+                <input type="localidade" class="form-control" id="localidade">
+
+                <label form="uf" class="form-label">UF</label>
+                <input type="uf" class="form-control" id="uf">
+
+                <button type="button" class="btn btn-danger" id="limpar"> Limpar</button>
+
+
+            </div>
+
+
+        </div>
+    </div>
+
+</body>
+
+</html>
